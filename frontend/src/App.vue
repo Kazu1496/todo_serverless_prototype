@@ -1,6 +1,6 @@
 <template lang="pug">
   div#app
-    global-header
+    global-header(v-if="$route.path !== '/signin'")
     transition(name="fade", mode="out-in")
       router-view
 </template>

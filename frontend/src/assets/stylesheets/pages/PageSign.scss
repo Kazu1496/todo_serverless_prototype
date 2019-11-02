@@ -1,49 +1,13 @@
 @import '../Setting.scss';
 @import '../Reset.scss';
 
-.signup_container, .signin_container{
+.signin_container{
   position: absolute;
-  top: calc(50% - 50px);
+  top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 500px;
-  text-align: center;
-  background-color: #FFF;
-  border-radius: 5px;
-  padding: 50px;
-  margin: 50px auto;
-  @include shadow(4px, 3px, 1px, 0.3);
-  h1{
-    font-size: 40px;
-    font-weight: bold;
-    margin-bottom: 20px;
-  }
-  button{
-    height: 50px;
-    width: 200px;
-    margin-bottom: 20px;
-  }
-  form{
-    display: flex;
-    flex-direction: column;
-    input[type="text"], input[type="password"]{
-      height: 30px;
-      font-size: 16px;
-      padding: 10px;
-      margin: 15px 0 10px;
-    }
-    input[type="submit"]{
-      height: 40px;
-      width: 120px;
-      margin: 20px auto;
-    }
-  }
-  p{
-    font-size: 13px;
-  }
-  a{
-    font-size: 13px;
-    color: $third_color;
-    text-decoration: none;
+  background-color: #F7F7F7;
+  .Form__formSection___3tqxz{
+    box-shadow: none !important;
   }
 }
