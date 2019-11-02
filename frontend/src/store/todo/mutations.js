@@ -1,0 +1,71 @@
+import { T } from './types'
+
+export const mutations = {
+  [T.GET_LABELS] (state, labels) {
+    state.labels = labels
+  },
+  [T.GET_TODOLISTS] (state, todos) {
+    const _todoLists = []
+    state.labels.forEach(label => {
+      let _filteredTodos = todos.filter(todo => todo.label === label.name)
+      const _todoList = { label: label.name, todos: _filteredTodos }
+      _todoLists.push(_todoList)
+    })
+    state.todos = todos
+    state.todoLists = _todoLists
+  },
+  [T.GET_TODO] (state, id) {
+    state.todos.forEach(item => {
+      if (item.id === id) {
+        state.todo = item
+      }
+    })
+  },
+  [T.ADD_TODO] (state, todo) {
+    state.todos.push(todo)
+    state.todoLists.forEach(todoList => {
+      if (todoList.label === todo.label) {
+        todoList.todos.push(todo)
+      }
+    })
+  },
+  // TODO ゴリ押し感がすっごいのであとで直す
+  [T.UPDATE_TODO] (state, { todo, beforeTodo }) {
+    state.todoLists.forEach(todoList => {
+      if (todoList.label !== todo.label) {
+        todoList.todos.forEach((item, index) => {
+          if (item.id === todo.id) {
+            todoList.todos.splice(index, 1)
+          }
+        })
+      } else {
+        if (!todoList.todos.includes(beforeTodo)) {
+          todoList.todos.push(todo)
+        }
+        todoList.todos.forEach(item => {
+          if (item.id === todo.id) {
+            item = todo
+          }
+        })
+      }
+    })
+  },
+  [T.DELETE_TODO] (state, todo) {
+    state.todoLists.forEach(todoList => {
+      todoList.todos.forEach((item, index) => {
+        if (item.id === todo.id) {
+          todoList.todos.splice(index, 1)
+        }
+      })
+    })
+  },
+  [T.PURGE_TODO] (state, todo) {
+    state.todoLists.forEach(todoList => {
+      if (todoList.label === 'Done') {
+        todoList.todos = []
+        // TODO なぜか空配列を代入しても値が更新されないので一旦リフレッシュで対応
+        window.location.reload()
+      }
+    })
+  }
+}

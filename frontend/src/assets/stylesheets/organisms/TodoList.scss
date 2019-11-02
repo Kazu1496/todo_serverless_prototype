@@ -1,0 +1,32 @@
+@import '../Setting.scss';
+@import '../Reset.scss';
+
+ul, .nothing_item{
+  width: calc(100% / 3);
+  height: 100%;
+  border-radius: 5px;
+  background-color: #FFF;
+  box-sizing: inherit;
+  padding: 10px;
+  @include shadow(4px, 3px, 1px, 0.3);
+  &:not(:last-child){
+    margin-right: 20px;
+  }
+  p{
+    padding-bottom: 5px;
+  }
+  .message{
+    color: $hint_black_text;
+    font-size: 20px;
+    font-weight: bold;
+    text-align: center;
+    margin-top: 20px;
+  }
+}
+.label{
+  font-size: 30px;
+  font-weight: bold;
+  color: $secondary_black_text;
+  border-bottom: 2px solid $secondary_black_text;
+  text-align: left;
+}

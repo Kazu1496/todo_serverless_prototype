@@ -1,0 +1,19 @@
+{
+  "name": "sls-api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "functions/handler.js",
+  "directories": {
+    "example": "example"
+  },
+  "scripts": {
+    "test": "serverless-bundle test"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "aws-sdk": "^2.562.0",
+    "eslint": "^6.6.0",
+    "serverless-bundle": "^1.2.5"
+  }
+}

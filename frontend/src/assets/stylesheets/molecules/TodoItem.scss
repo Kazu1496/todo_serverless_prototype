@@ -1,0 +1,36 @@
+@import '../Setting.scss';
+@import '../Reset.scss';
+
+a{
+  display: block;
+  text-decoration: none;
+  li{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 10px;
+    margin: 15px auto;
+    padding: 15px;
+    @include shadow(1px, 2px, 1px, 0.3);
+    .todo_elements{
+      display: flex;
+      flex-direction: column;
+      .priority_area{
+        display: flex;
+        align-items: center;
+        font-size: 16px;
+        svg{
+          color: $third_color;
+        }
+      }
+    }
+    .title{
+      display: block;
+      width: 100%;
+      font-size: 16px;
+      font-weight: bold;
+      color: $secondary_black_text;
+      margin-bottom: 10px;
+    }
+  }
+}

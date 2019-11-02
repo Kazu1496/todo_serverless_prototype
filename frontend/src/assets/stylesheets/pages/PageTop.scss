@@ -1,0 +1,16 @@
+@import '../Setting.scss';
+
+.todo{
+  margin: 20px;
+  .button_area{
+    text-align: right;
+    button{
+      padding: 5px 10px;
+      margin: 0 0 20px 20px;
+      @include shadow(1px, 2px, 1px, 0.3);
+    }
+  }
+  .list-container{
+    display: flex;
+  }
+}

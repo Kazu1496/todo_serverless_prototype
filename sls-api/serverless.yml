@@ -1,0 +1,65 @@
+service: sls-api
+
+package:
+  individually: true
+
+plugins:
+  - serverless-bundle
+
+provider:
+  name: aws
+  runtime: nodejs10.x
+  stage: ${opt:stage, self:custom.defaultStage}
+  region: ap-northeast-1
+  iamManagedPolicies:
+    - "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:DescribeTable
+        - dynamodb:Query
+        - dynamodb:Scan
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+        - dynamodb:UpdateItem
+        - dynamodb:DeleteItem
+      Resource:
+        - 'arn:aws:dynamodb:ap-northeast-1:*:*'
+  environment:
+    DEPLOY_STAGE: ${opt:stage, self:custom.defaultStage}
+    TODOS_TABLE_NAME: ${opt:stage, self:custom.defaultStage}_Todo
+
+functions:
+  hello:
+    handler: functions/handler.hello
+    events:
+      - http:
+          path: hello
+          method: get
+          cors: true
+  createTask:
+    handler: functions/task.create
+    events:
+      - http:
+          path: task
+          method: post
+          cors: true
+
+resources:
+  Resources:
+    ResourcesDynamoDbTable:
+      Type: 'AWS::DynamoDB::Table'
+      DeletionPolicy: Delete
+      Properties:
+        AttributeDefinitions:
+          -
+            AttributeName: id
+            AttributeType: S
+        KeySchema:
+          -
+            AttributeName: id
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+        TableName: ${opt:stage, self:custom.defaultStage}_Todo

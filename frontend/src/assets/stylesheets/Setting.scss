@@ -1,0 +1,49 @@
+$first_color: #F44336;
+$second_color: #FF5252;
+$third_color: #FFA726;
+
+$primary_white_text: rgba(#FFF,0.87);
+$secondary_white_text: rgba(#FFF,0.54);
+$hint_white_text: rgba(#FFF,0.38);
+$divider_white_text: rgba(#FFF,0.14);
+
+$primary_black_text: rgba(#000,0.87);
+$secondary_black_text: rgba(#000,0.54);
+$hint_black_text: rgba(#000,0.38);
+$divider_black_text: rgba(#000,0.14);
+
+@mixin shadow($vertical, $blur, $depth, $opacity){
+  box-shadow: 0px $vertical $blur $depth rgba(0,0,0,$opacity);
+  -webkit-box-shadow: 0px $vertical $blur $depth rgba(0,0,0,$opacity);
+  -moz-box-shadow: 0px $vertical $blur $depth rgba(0,0,0,$opacity);
+}
+
+input[type="submit"], button{
+  height: 35px;
+  text-decoration: none;
+  color: #FFF;
+  font-size: 18px;
+  font-weight: bold;
+  -webkit-box-sizing: content-box;
+  -webkit-appearance: button;
+  appearance: button;
+  box-sizing: border-box;
+  border: 1px solid #FFA726;
+  border-radius: 5px;
+  background-color: #FFA726;
+  padding: 0 10px;
+  &::-webkit-search-decoration {
+    display: none;
+  }
+  &:focus {
+    outline-offset: -2px;
+  }
+}
+
+a, input[type="submit"], button{
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+  &:hover{
+    opacity: 0.7;
+  }
+}

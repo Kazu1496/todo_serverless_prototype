@@ -1,0 +1,59 @@
+@import '../Setting.scss';
+@import '../Markdown.scss';
+
+.show_item-container{
+  width: 900px;
+  font-size: 20px;
+  background-color: #FFF;
+  border-radius: 5px;
+  padding: 20px;
+  margin: 50px auto;
+  @include shadow(4px, 3px, 1px, 0.3);
+  .title{
+    color: $primary_black_text;
+    font-size: 30px;
+    font-weight: bold;
+    border-bottom: 3px solid $primary_black_text;
+    padding-bottom: 10px;
+    margin: 0;
+  }
+  .status_area, .priority_area, .description_area{
+    margin: 20px 0;
+    .area_title{
+      color: $secondary_black_text;
+      font-size: 20px;
+      font-weight: bold;
+      margin: 0 10px 10px 0;
+    }
+    p{
+      margin: 0;
+    }
+  }
+  .priority_area{
+    svg{
+      font-size: 24px;
+      color: $third_color;
+      margin-right: 10px;
+    }
+  }
+  .description_area{
+    .markdown-body{
+      background-color: #F7F7F7;
+      padding: 20px;
+    }
+  }
+  .link_area{
+    text-align: center;
+    a{
+      color: #FFF;
+      font-size: 18px;
+      font-weight: bold;
+      text-decoration: none;
+      background-color: $third_color;
+      border-radius: 5px;
+      cursor: pointer;
+      padding: 10px 20px;
+      margin: 0 20px;
+    }
+  }
+}

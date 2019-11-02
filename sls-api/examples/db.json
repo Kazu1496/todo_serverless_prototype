@@ -1,0 +1,50 @@
+{
+  "user": {
+    "userId_1": {
+      "name": "test",
+      "image": "hogehoge"
+    },
+    "userId_2": {
+      "name": "kazu",
+      "image": "fugafuga"
+    }
+  },
+  "task": {
+    "task1": {
+      "title": "title",
+      "description": "description",
+      "list": "backlog",
+      "userId": "userId_1",
+      "createdAt": "",
+      "updatedAt": ""
+    },
+    "task2": {
+      "title": "test",
+      "description": "testtesttest",
+      "list": "current",
+      "userId": "userId_1",
+      "createdAt": "",
+      "updatedAt": ""
+    },
+    "task3": {
+      "title": "hoge",
+      "description": "hogehogehoge",
+      "list": "done",
+      "userId": "userId_2",
+      "createdAt": "",
+      "updatedAt": ""
+    }
+  },
+  "userHasTask": {
+    "userId_1": {
+      "task1": true,
+      "task2": true,
+      "task3": false,
+    },
+    "userId_2": {
+      "task1": false,
+      "task2": false,
+      "task3": true,
+    }
+  }
+}
