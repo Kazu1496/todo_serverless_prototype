@@ -1,0 +1,12 @@
+{
+    "body": {
+        "title": "Test Title",
+        "description": "Test Description",
+        "list": "backlog"
+    },
+    "requestContext": {
+        "identity": {
+            "cognitoIdentityId": "local-test"
+        }
+    }
+}

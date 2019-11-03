@@ -27,7 +27,7 @@ provider:
         - 'arn:aws:dynamodb:ap-northeast-1:*:*'
   environment:
     DEPLOY_STAGE: ${opt:stage, self:custom.defaultStage}
-    TODOS_TABLE_NAME: ${opt:stage, self:custom.defaultStage}_Todo
+    TODOS_TABLE_NAME: Todo$_{opt:stage, self:custom.defaultStage}
 
 functions:
   hello:
@@ -38,12 +38,37 @@ functions:
           method: get
           cors: true
   createTask:
-    handler: functions/task.create
+    handler: functions/task.createTask
     events:
       - http:
           path: task
           method: post
           cors: true
+          authorizer: aws_iam
+  deleteTask:
+    handler: functions/task.deleteTask
+    events:
+      - http:
+          path: task/{id}
+          method: delete
+          cors: true
+          authorizer: aws_iam
+  getTask:
+    handler: functions/task.getTask
+    events:
+      - http:
+          path: task/{id}
+          method: get
+          cors: true
+          authorizer: aws_iam
+  updateTask:
+    handler: functions/task.updateTask
+    events:
+      - http:
+          path: task/{id}
+          method: put
+          cors: true
+          authorizer: aws_iam
 
 resources:
   Resources:
@@ -53,13 +78,19 @@ resources:
       Properties:
         AttributeDefinitions:
           -
-            AttributeName: id
+            AttributeName: taskId
+            AttributeType: S
+          -
+            AttributeName: userId
             AttributeType: S
         KeySchema:
           -
-            AttributeName: id
+            AttributeName: taskId
             KeyType: HASH
+          -
+            AttributeName: userId
+            KeyType: RANGE
         ProvisionedThroughput:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
-        TableName: ${opt:stage, self:custom.defaultStage}_Todo
+        TableName: Todo_${opt:stage, self:custom.defaultStage}

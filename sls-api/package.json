@@ -7,13 +7,25 @@
     "example": "example"
   },
   "scripts": {
-    "test": "serverless-bundle test"
+    "test": "serverless-bundle test",
+    "lint": "eslint --ext .js --ignore-path .gitignore .",
+    "fix": "eslint --fix --ext .js --ignore-path .gitignore ."
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "aws-sdk": "^2.562.0",
     "eslint": "^6.6.0",
+    "eslint-config-standard": "^14.1.0",
+    "eslint-plugin-import": "^2.18.2",
+    "eslint-plugin-node": "^10.0.0",
+    "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-standard": "^4.0.1",
+    "prettier": "^1.18.2",
     "serverless-bundle": "^1.2.5"
+  },
+  "dependencies": {
+    "serverless": "^1.56.1",
+    "sls": "^0.1.0"
   }
 }
