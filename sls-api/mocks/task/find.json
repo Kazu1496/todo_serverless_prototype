@@ -1,7 +1,4 @@
 {
-    "pathParameters": {
-        "taskId": "12c01710-983c-420f-a707-ab282c7859a6"
-    },
     "requestContext": {
         "identity": {
             "cognitoIdentityId": "local-test"

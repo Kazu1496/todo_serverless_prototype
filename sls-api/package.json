@@ -9,7 +9,8 @@
   "scripts": {
     "test": "serverless-bundle test",
     "lint": "eslint --ext .js --ignore-path .gitignore .",
-    "fix": "eslint --fix --ext .js --ignore-path .gitignore ."
+    "fix": "eslint --fix --ext .js --ignore-path .gitignore .",
+    "init": "eslint --init"
   },
   "author": "",
   "license": "ISC",

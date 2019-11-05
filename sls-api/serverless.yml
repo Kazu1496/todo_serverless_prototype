@@ -69,6 +69,14 @@ functions:
           method: put
           cors: true
           authorizer: aws_iam
+  findTasks:
+    handler: functions/task.findTasks
+    events:
+      - http:
+          path: tasks
+          method: get
+          cors: true
+          authorizer: aws_iam
 
 resources:
   Resources:
@@ -78,19 +86,36 @@ resources:
       Properties:
         AttributeDefinitions:
           -
-            AttributeName: taskId
+            AttributeName: group
             AttributeType: S
           -
-            AttributeName: userId
+            AttributeName: groupId
+            AttributeType: S
+          -
+            AttributeName: ownerId
             AttributeType: S
         KeySchema:
           -
-            AttributeName: taskId
+            AttributeName: group
             KeyType: HASH
           -
-            AttributeName: userId
+            AttributeName: groupId
             KeyType: RANGE
         ProvisionedThroughput:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
+        GlobalSecondaryIndexes:
+        - IndexName: group-ownerId-index
+          KeySchema:
+            -
+              AttributeName: group
+              KeyType: HASH
+            -
+              AttributeName: ownerId
+              KeyType: RANGE
+          Projection:
+            ProjectionType: ALL
+          ProvisionedThroughput:
+            ReadCapacityUnits: 1
+            WriteCapacityUnits: 1
         TableName: Todo_${opt:stage, self:custom.defaultStage}

@@ -1,15 +1,11 @@
 {
     "pathParameters": {
-        "taskId": "d4026fad-9125-4db9-819c-d9a391f2eba9"
+        "taskId": "12c01710-983c-420f-a707-ab282c7859a6"
     },
     "body": {
         "title": "Update Title",
         "description": "Update Description",
-        "list": "next"
-    },
-    "requestContext": {
-        "identity": {
-            "cognitoIdentityId": "local-test"
-        }
+        "list": "next",
+        "priority": "3"
     }
 }
