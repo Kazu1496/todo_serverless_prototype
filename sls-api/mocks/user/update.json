@@ -1,0 +1,9 @@
+{
+    "body": {
+      "nickname": "kazu",
+      "image": null
+    },
+    "pathParameters": {
+      "userId": ""
+    }
+}

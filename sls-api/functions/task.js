@@ -81,8 +81,8 @@ export const updateTask = async event => {
     },
     ExpressionAttributeValues: {
       ':attributes': {
-        title: event.body.title || '',
-        description: event.body.description || '',
+        title: event.body.title || ' ',
+        description: event.body.description || ' ',
         list: event.body.list || 'backlog',
         priority: event.body.priority || 0
       },
