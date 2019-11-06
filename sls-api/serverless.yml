@@ -38,6 +38,7 @@ functions:
           path: hello
           method: get
           cors: true
+          authorizer: aws_iam
   createTask:
     handler: functions/task.createTask
     events:
@@ -45,6 +46,7 @@ functions:
           path: task
           method: post
           cors: true
+          authorizer: aws_iam
   deleteTask:
     handler: functions/task.deleteTask
     events:
@@ -52,6 +54,7 @@ functions:
           path: task/{id}
           method: delete
           cors: true
+          authorizer: aws_iam
   getTask:
     handler: functions/task.getTask
     events:
@@ -59,6 +62,7 @@ functions:
           path: task/{id}
           method: get
           cors: true
+          authorizer: aws_iam
   updateTask:
     handler: functions/task.updateTask
     events:
@@ -66,6 +70,7 @@ functions:
           path: task/{id}
           method: put
           cors: true
+          authorizer: aws_iam
   findTasks:
     handler: functions/task.findTasks
     events:
@@ -73,14 +78,13 @@ functions:
           path: tasks
           method: get
           cors: true
-  # Cognito認証をトリガーとしてユーザー情報を作成したいけどよくわからない
+          authorizer: aws_iam
   createUser:
     handler: functions/user.createUser
     events:
       - cognitoUserPool:
         pool: sls-api-dev
         trigger: PreAuthentication
-  # -----------------------------------------------------------
   getUser:
     handler: functions/user.getUser
     events:
@@ -88,6 +92,7 @@ functions:
           path: user/{id}
           method: get
           cors: true
+          authorizer: aws_iam
   updateUser:
     handler: functions/user.updateUser
     events:
@@ -95,7 +100,7 @@ functions:
           path: task/{id}
           method: put
           cors: true
-
+          authorizer: aws_iam
 
 resources:
   Resources:
@@ -210,10 +215,8 @@ resources:
             - "custom:custom-attributes"
 Outputs:
   UserPoolClientId:
-    Description: 'The name of the user pool client'
     Value:
       Ref: UserPoolClient
   UserPoolId:
-    Description: 'The name of the user pool'
     Value:
       Ref: UserPool
