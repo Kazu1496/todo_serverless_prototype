@@ -9,7 +9,7 @@ plugins:
 provider:
   name: aws
   runtime: nodejs10.x
-  stage: ${opt:stage, self:custom.defaultStage}
+  stage: ${opt:stage, 'dev'}
   region: ap-northeast-1
   iamManagedPolicies:
     - "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
@@ -24,11 +24,13 @@ provider:
         - dynamodb:UpdateItem
         - dynamodb:DeleteItem
       Resource:
-        - 'arn:aws:dynamodb:ap-northeast-1:*:*'
-        - 'arn:aws:cognito-idp:ap-northeast-1:723620532520:userpool/ap-northeast-1_niOLvC5MF'
+        - 'Fn::GetAtt': [ TodoTable, Arn ]
   environment:
-    DEPLOY_STAGE: ${opt:stage, self:custom.defaultStage}
-    TODOS_TABLE_NAME: Todo$_{opt:stage, self:custom.defaultStage}
+    DEPLOY_STAGE: ${self:provider.stage}
+    TODOS_TABLE_NAME: Todo$_{self:provider.stage}
+
+custom:
+  todoTable: Todo_${self:provider.stage}
 
 functions:
   hello:
@@ -104,47 +106,35 @@ functions:
 
 resources:
   Resources:
-    ResourcesDynamoDbTable:
-      Type: 'AWS::DynamoDB::Table'
+    TodoTable:
+      Type: AWS::DynamoDB::Table
       DeletionPolicy: Delete
       Properties:
         AttributeDefinitions:
-          -
-            AttributeName: group
+          - AttributeName: group
             AttributeType: S
-          -
-            AttributeName: groupId
+          - AttributeName: groupId
             AttributeType: S
-          -
-            AttributeName: ownerId
+          - AttributeName: ownerId
             AttributeType: S
         KeySchema:
-          -
-            AttributeName: group
+          - AttributeName: group
             KeyType: HASH
-          -
-            AttributeName: groupId
+          - AttributeName: groupId
             KeyType: RANGE
-        ProvisionedThroughput:
-          ReadCapacityUnits: 1
-          WriteCapacityUnits: 1
+        BillingMode: PAY_PER_REQUEST
         GlobalSecondaryIndexes:
         - IndexName: group-ownerId-index
           KeySchema:
-            -
-              AttributeName: group
+            - AttributeName: group
               KeyType: HASH
-            -
-              AttributeName: ownerId
+            - AttributeName: ownerId
               KeyType: RANGE
           Projection:
             ProjectionType: ALL
-          ProvisionedThroughput:
-            ReadCapacityUnits: 1
-            WriteCapacityUnits: 1
-        TableName: Todo_${opt:stage, self:custom.defaultStage}
+        TableName: ${self:custom.todoTable}
     UserPool:
-      Type: "AWS::Cognito::UserPool"
+      Type: AWS::Cognito::UserPool
       Properties:
         AdminCreateUserConfig:
             AllowAdminCreateUserOnly: false
@@ -213,10 +203,75 @@ resources:
             - "email"
             - "name"
             - "custom:custom-attributes"
-Outputs:
-  UserPoolClientId:
-    Value:
-      Ref: UserPoolClient
-  UserPoolId:
-    Value:
-      Ref: UserPool
+    IdentityPool:
+      Type: AWS::Cognito::IdentityPool
+      Properties:
+        IdentityPoolName:
+          Ref: AWS::StackName
+        AllowUnauthenticatedIdentities: false
+        CognitoIdentityProviders:
+          - ClientId:
+              Ref: UserPoolClient
+            ProviderName:
+              Fn::GetAtt: [ "UserPool", "ProviderName" ]
+    CognitoIdentityPoolRoles:
+      Type: AWS::Cognito::IdentityPoolRoleAttachment
+      Properties:
+        IdentityPoolId:
+          Ref: IdentityPool
+        Roles:
+          authenticated:
+            Fn::GetAtt: [CognitoAuthRole, Arn]
+    CognitoAuthRole:
+      Type: AWS::IAM::Role
+      Properties:
+        Path: /
+        AssumeRolePolicyDocument:
+          Version: '2012-10-17'
+          Statement:
+            - Effect: 'Allow'
+              Principal:
+                Federated: 'cognito-identity.amazonaws.com'
+              Action:
+                - 'sts:AssumeRoleWithWebIdentity'
+              Condition:
+                StringEquals:
+                  'cognito-identity.amazonaws.com:aud':
+                    Ref: IdentityPool
+                'ForAnyValue:StringLike':
+                  'cognito-identity.amazonaws.com:amr': authenticated
+        Policies:
+          - PolicyName: 'CognitoAuthorizedPolicy'
+            PolicyDocument:
+              Version: '2012-10-17'
+              Statement:
+                - Effect: 'Allow'
+                  Action:
+                    - 'mobileanalytics:PutEvents'
+                    - 'cognito-sync:*'
+                    - 'cognito-identity:*'
+                  Resource: '*'
+                - Effect: 'Allow'
+                  Action:
+                    - 'execute-api:Invoke'
+                  Resource:
+                    Fn::Join:
+                      - ''
+                      -
+                        - 'arn:aws:execute-api:'
+                        - Ref: AWS::Region
+                        - ':'
+                        - Ref: AWS::AccountId
+                        - ':'
+                        - Ref: ApiGatewayRestApi
+                        - '/*'
+  Outputs:
+    UserPoolClientId:
+      Value:
+        Ref: UserPoolClient
+    UserPoolId:
+      Value:
+        Ref: UserPool
+    IdentityPoolId:
+      Value:
+        Ref: IdentityPool
