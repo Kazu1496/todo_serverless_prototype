@@ -1,18 +1,12 @@
 import { T } from './types'
-import axios from 'axios'
+import Amplify from 'aws-amplify'
 
-const URL = process.env.VUE_APP_API_URL_BASE
 export const actions = {
-  async [T.GET_LABELS] ({ commit }) {
-    await axios.get(`${URL}/card_labels`)
+  async [T.GET_TASKS] ({ commit }) {
+    await Amplify.API.get('dev-sls-api', '/tasks')
       .then(res => {
-        commit(T.GET_LABELS, res.data)
-      })
-  },
-  async [T.GET_TODOLISTS] ({ commit }) {
-    await axios.get(`${URL}/cards`)
-      .then(res => {
-        commit(T.GET_TODOLISTS, res.data)
+        console.log(res, 'res')
+        commit(T.GET_TASKS, res.data)
       })
   },
   [T.GET_TODO] ({ commit }, id) {
@@ -49,20 +43,5 @@ export const actions = {
       .catch(err => {
         alert(err)
       })
-  },
-  [T.PURGE_TODO] ({ commit }, todoLists) {
-    todoLists.forEach(todoList => {
-      if (todoList.label === 'Done') {
-        todoList.todos.forEach(todo => {
-          axios.delete(`${URL}/cards/${todo.id}`)
-            .then(res => {
-              commit(T.PURGE_TODO, res.data)
-            })
-            .catch(err => {
-              alert(err)
-            })
-        })
-      }
-    })
   }
 }

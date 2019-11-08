@@ -2,9 +2,12 @@
   .todo
     .button_area
       button(@click="showModal = true") Add Todo
-      button(@click="purgeItem") Purge
     .list-container
-      todo-list(v-for="todoList in todoLists", :todos="todoList.todos", :label="todoList.label")
+      p {{ tasklist }}
+      template(v-if="tasks")
+        todo-list(v-for="tasks in tasks" :tasks="tasks" :label="Current")
+      template(v-else)
+        p なにもないよ
     add-item-modal(v-show="showModal", @close="showModal = false")
 </template>
 
@@ -25,26 +28,19 @@ export default {
   data: () => {
     return {
       newItem: '',
-      showModal: false
+      showModal: false,
+      hello: '',
+      tasklist: []
     }
   },
   computed: {
     ...mapGetters('todo', {
-      todoLists: 'getTodolists',
-      labels: 'getLables'
+      tasks: 'getTasks'
     })
   },
-  mounted () {
-    this.$store.dispatch(`todo/${T.GET_LABELS}`)
-    this.$store.dispatch(`todo/${T.GET_TODOLISTS}`)
-  },
-  methods: {
-    purgeItem () {
-      if (!confirm('一括削除しても大丈夫ですか？')) {
-        return
-      }
-      this.$store.dispatch(`todo/${T.PURGE_TODO}`, this.todoLists)
-    }
+  async mounted () {
+    const user = await this.$Amplify.Auth.currentSession()
+    this.$store.dispatch(`todo/${T.GET_TASKS}`)
   }
 }
 </script>

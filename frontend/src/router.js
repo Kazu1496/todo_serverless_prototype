@@ -5,12 +5,10 @@ import Signin from './components/pages/PageSignin.vue'
 import ShowItem from './components/pages/PageShowItem.vue'
 import { T } from './store/user/types'
 import store from './store'
-
-import { AmplifyEventBus, AmplifyPlugin } from 'aws-amplify-vue'
-import * as AmplifyModules from 'aws-amplify'
+import { AmplifyEventBus } from 'aws-amplify-vue'
+import { Auth } from 'aws-amplify'
 
 Vue.use(Router)
-Vue.use(AmplifyPlugin, AmplifyModules)
 
 let router = new Router({
   mode: 'history',
@@ -43,7 +41,7 @@ let router = new Router({
 let user
 
 const getUser = () => {
-  return Vue.prototype.$Amplify.Auth.currentAuthenticatedUser().then((data) => {
+  return Auth.currentAuthenticatedUser().then((data) => {
     if (data && data.signInUserSession) {
       store.commit(`user/${T.SET_USER}`, data)
       return data

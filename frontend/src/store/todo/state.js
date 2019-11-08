@@ -1,6 +1,4 @@
 export default {
-  todoLists: [],
-  todos: [],
-  todo: {},
-  labels: []
+  tasks: [],
+  task: {}
 }

@@ -6,10 +6,11 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { StarRating } from 'vue-rate-it'
 import App from './App.vue'
 import router from './router'
+
+// aws-amplify registering
 import Amplify, * as AmplifyModules from 'aws-amplify'
 import { AmplifyPlugin } from 'aws-amplify-vue'
 import awsconfig from './aws-exports'
-
 Amplify.configure(awsconfig)
 Vue.use(AmplifyPlugin, AmplifyModules)
 

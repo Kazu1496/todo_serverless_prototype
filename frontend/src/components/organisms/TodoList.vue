@@ -20,7 +20,7 @@ export default {
     TodoItem
   },
   props: {
-    todos: {
+    tasks: {
       type: Array,
       require: true,
       default: () => ([])

@@ -1,21 +1,15 @@
 import { T } from './types'
+import { TaskListEnum } from '../../types/index'
 
 export const mutations = {
-  [T.GET_LABELS] (state, labels) {
-    state.labels = labels
-  },
-  [T.GET_TODOLISTS] (state, todos) {
-    const _todoLists = []
-    state.labels.forEach(label => {
-      let _filteredTodos = todos.filter(todo => todo.label === label.name)
-      const _todoList = { label: label.name, todos: _filteredTodos }
-      _todoLists.push(_todoList)
+  [T.GET_TASKS] (state, tasks) {
+    Object.key(TaskListEnum).forEach(key => {
+      const _tasks = tasks.filter(task => task.attributes.label === key)
+      state.tasks.push({ key: _tasks })
     })
-    state.todos = todos
-    state.todoLists = _todoLists
   },
   [T.GET_TODO] (state, id) {
-    state.todos.forEach(item => {
+    state.tasks.forEach(item => {
       if (item.id === id) {
         state.todo = item
       }

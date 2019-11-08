@@ -1,11 +1,8 @@
 export const getters = {
-  getTodolists (state) {
+  getTasks (state) {
     return state.todoLists
   },
-  getLables (state) {
-    return state.labels
-  },
-  getTodo (state) {
+  getTask (state) {
     return state.todo
   }
 }
