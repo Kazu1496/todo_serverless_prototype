@@ -1,31 +1,33 @@
 <template lang="pug">
   .show_item-container
     .item_header
-      h1.title {{ todo.title }}
+      h1.title {{ task.attributes.title }}
     .status_area
       p.area_title Status
-      p {{ todo.label }}
+      p {{ task.attributes.list }}
     .priority_area
       p.area_title Priority
-      font-awesome-icon(icon="star", v-for="n in todo.score")
+      font-awesome-icon(icon="star", v-for="n in task.attributes.priority" :key="n")
     .description_area
       p.area_title Description
       vue-markdown(
-        :source="todo.description? todo.description : '説明文がありません。' "
+        :source="task.attributes.description? task.attributes.description : '説明文がありません。' "
         class="markdown-body"
       )
     .link_area
       router-link(:to="{ name: 'home' }") Back
       a(@click="showModal = true") Edit
       a(@click="deleteItem") Delete
-    edit-item-modal(v-show="showModal", @close="showModal = false", :todo="todo")
+    edit-item-modal(v-show="showModal", @close="showModal = false", :task="targetTask")
 </template>
 
 <script>
 import EditItemModal from '../modal/EditItemModal.vue'
 import VueMarkdown from 'vue-markdown'
-import { T } from '../../store/todo/types'
+import { T } from '../../store/task/types'
 import { mapGetters } from 'vuex'
+
+const clonedeep = require('lodash/cloneDeep')
 
 export default {
   name: 'PageShowItem',
@@ -35,23 +37,35 @@ export default {
   },
   data () {
     return {
-      showModal: false
+      showModal: false,
+      targetTask: {}
     }
   },
   computed: {
-    ...mapGetters('todo', {
-      todo: 'getTodo'
+    ...mapGetters('task', {
+      task: 'getTask'
     })
   },
+  watch: {
+    task: {
+      handler: function (newVal, oldValue) {
+        if (newVal !== oldValue) {
+          this.targetTask = clonedeep(newVal)
+        }
+      },
+      deep: true,
+      immediate: true
+    }
+  },
   mounted () {
-    this.$store.dispatch(`todo/${T.GET_TODO}`, this.$route.params.card_id)
+    this.$store.dispatch(`task/${T.GET_TASK}`, this.$route.params.task_id)
   },
   methods: {
     deleteItem () {
       if (!confirm('削除しても大丈夫ですか？')) {
         return
       }
-      this.$store.dispatch(`todo/${T.DELETE_TODO}`, this.$route.params.card_id)
+      this.$store.dispatch(`task/${T.DELETE_TASK}`, this.$route.params.task_id)
       this.$router.push('/')
     }
   }

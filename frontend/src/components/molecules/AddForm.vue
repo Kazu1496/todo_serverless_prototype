@@ -2,8 +2,8 @@
   form(@submit.prevent="addItem")
     input(type="text", v-model="title", placeholder="Title")
     .score_area
-      span Priority:{{ score }}
-      star-rating(:star-size="20", :show-rating="false", active-color="#FFA726", v-model="score")
+      span Priority:{{ priority }}
+      star-rating(:star-size="20", :show-rating="false", active-color="#FFA726", v-model="priority")
     .select_area
       span Status:
       select(v-model="selected")
@@ -14,6 +14,7 @@
 
 <script>
 import { T } from '../../store/todo/types'
+import { TaskListEnum } from '../../types/index'
 
 export default {
   name: 'AddForm',
@@ -21,9 +22,9 @@ export default {
     return {
       title: '',
       description: '',
-      score: 1,
-      selected: 'Todo',
-      options: ['Todo', 'Doing']
+      priority: 1,
+      selected: 'BACKLOG',
+      options: Object.keys(TaskListEnum)
     }
   },
   methods: {
@@ -33,12 +34,12 @@ export default {
         return
       }
       const item = {
-        score: this.score,
+        priority: this.priority,
         title: this.title,
         description: this.description,
-        label: this.selected
+        list: this.selected
       }
-      this.$store.dispatch(`todo/${T.ADD_TODO}`, item)
+      this.$store.dispatch(`task/${T.ADD_TASK}`, { body: item })
       this.title = ''
       this.description = ''
       this.score = 1

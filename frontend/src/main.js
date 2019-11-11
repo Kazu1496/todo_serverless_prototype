@@ -12,6 +12,16 @@ import Amplify, * as AmplifyModules from 'aws-amplify'
 import { AmplifyPlugin } from 'aws-amplify-vue'
 import awsconfig from './aws-exports'
 Amplify.configure(awsconfig)
+Amplify.configure({
+  API: {
+    endpoints: [
+      {
+        name: 'sls-api',
+        endpoint: process.env.VUE_APP_API_URL_BASE
+      }
+    ]
+  }
+})
 Vue.use(AmplifyPlugin, AmplifyModules)
 
 library.add(fas)

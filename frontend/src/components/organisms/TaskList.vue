@@ -1,10 +1,10 @@
 <template lang="pug">
-  ul(v-if="localTodos.length")
+  ul(v-if="sortedTasks.length")
     p.label {{ label }}
     .list_item-container
-      todo-item(
-        v-for="todo in localTodos"
-        :todo="todo"
+      task-item(
+        v-for="task in sortedTasks"
+        :task="task"
       )
   ul(v-else)
     p.label {{ label }}
@@ -12,12 +12,12 @@
 </template>
 
 <script>
-import TodoItem from '../molecules/TodoItem.vue'
+import TaskItem from '../molecules/TaskItem.vue'
 
 export default {
-  name: 'TodoList',
+  name: 'TaskList',
   components: {
-    TodoItem
+    TaskItem
   },
   props: {
     tasks: {
@@ -33,14 +33,14 @@ export default {
   },
   data: () => {
     return {
-      localTodos: []
+      sortedTasks: []
     }
   },
   mounted () {
-    const _todoList = this.$props.todos
-    this.localTodos = _todoList.sort((a, b) => {
-      if (a.score > b.score) return -1
-      if (a.score < b.score) return 1
+    const _taskList = this.$props.tasks
+    this.sortedTasks = _taskList.sort((a, b) => {
+      if (a.attributes.priority > b.attributes.priority) return -1
+      if (a.attributes.priority < b.attributes.priority) return 1
       return 0
     })
   }

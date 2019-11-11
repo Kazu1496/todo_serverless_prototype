@@ -5,7 +5,7 @@
         button(@click="$emit('close')")
           font-awesome-icon(icon="times", size="2x")
         h2 Edit Todo!
-        edit-form(:todo="todo")
+        edit-form(:task="task")
 </template>
 
 <script>
@@ -17,7 +17,7 @@ export default {
     EditForm
   },
   props: {
-    todo: {
+    task: {
       type: Object,
       require: true,
       default: () => ([])

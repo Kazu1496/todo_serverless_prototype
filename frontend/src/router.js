@@ -30,7 +30,7 @@ let router = new Router({
       component: Signin
     },
     {
-      path: '/cards/:card_id',
+      path: '/tasks/:task_id',
       name: 'show-item',
       component: ShowItem,
       meta: { requiresAuth: true }

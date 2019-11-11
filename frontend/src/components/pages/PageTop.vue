@@ -3,17 +3,13 @@
     .button_area
       button(@click="showModal = true") Add Todo
     .list-container
-      p {{ tasklist }}
-      template(v-if="tasks")
-        todo-list(v-for="tasks in tasks" :tasks="tasks" :label="Current")
-      template(v-else)
-        p なにもないよ
+      task-list(v-for="(tasks, key) in taskList" :tasks="tasks" :label="key")
     add-item-modal(v-show="showModal", @close="showModal = false")
 </template>
 
 <script>
 import AddForm from '../molecules/AddForm.vue'
-import TodoList from '../organisms/TodoList.vue'
+import TaskList from '../organisms/TaskList.vue'
 import AddItemModal from '../modal/AddItemModal.vue'
 import { T } from '../../store/todo/types'
 import { mapGetters } from 'vuex'
@@ -22,25 +18,21 @@ export default {
   name: 'PageTop',
   components: {
     AddForm,
-    TodoList,
+    TaskList,
     AddItemModal
   },
   data: () => {
     return {
-      newItem: '',
-      showModal: false,
-      hello: '',
-      tasklist: []
+      showModal: false
     }
   },
   computed: {
-    ...mapGetters('todo', {
-      tasks: 'getTasks'
+    ...mapGetters('task', {
+      taskList: 'getTasks'
     })
   },
-  async mounted () {
-    const user = await this.$Amplify.Auth.currentSession()
-    this.$store.dispatch(`todo/${T.GET_TASKS}`)
+  mounted () {
+    this.$store.dispatch(`task/${T.GET_TASKS}`)
   }
 }
 </script>
