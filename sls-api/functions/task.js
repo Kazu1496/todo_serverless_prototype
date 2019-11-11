@@ -5,6 +5,7 @@ import { success, failure } from '../libs/response-lib'
 const TableName = `Todo_${process.env.DEPLOY_STAGE}`
 
 export const createTask = async event => {
+  const data = JSON.parse(event.body)
   const params = {
     TableName: TableName,
     Item: {
@@ -14,10 +15,10 @@ export const createTask = async event => {
       createdAt: Date.now(),
       updatedAt: Date.now(),
       attributes: {
-        title: event.body.title,
-        description: event.body.description,
-        list: event.body.list,
-        priority: event.body.priority
+        title: data.title || 'title',
+        description: data.description || ' ',
+        list: data.list || 'BACKLOG',
+        priority: data.priority || 1
       }
     }
   }
@@ -35,7 +36,7 @@ export const deleteTask = async event => {
     TableName: TableName,
     Key: {
       group: 'task',
-      groupId: `task_${event.pathParameters.taskId}`
+      groupId: event.pathParameters.id
     }
   }
 
@@ -52,7 +53,7 @@ export const getTask = async event => {
     TableName: TableName,
     Key: {
       group: 'task',
-      groupId: `task_${event.pathParameters.taskId}`
+      groupId: event.pathParameters.id
     }
   }
 
@@ -69,11 +70,13 @@ export const getTask = async event => {
 }
 
 export const updateTask = async event => {
+  const data = JSON.parse(event.body)
+  console.log(data, 'data')
   const params = {
     TableName: TableName,
     Key: {
       group: 'task',
-      groupId: `task_${event.pathParameters.taskId}`
+      groupId: event.pathParameters.id
     },
     ExpressionAttributeNames: {
       '#a': 'attributes',
@@ -81,10 +84,10 @@ export const updateTask = async event => {
     },
     ExpressionAttributeValues: {
       ':attributes': {
-        title: event.body.title || ' ',
-        description: event.body.description || ' ',
-        list: event.body.list || 'backlog',
-        priority: event.body.priority || 0
+        title: data.title || 'title',
+        description: data.description || ' ',
+        list: data.list || 'BACKLOG',
+        priority: data.priority || 1
       },
       ':updatedAt': Date.now()
     },
@@ -93,8 +96,8 @@ export const updateTask = async event => {
   }
 
   try {
-    await dynamoDbLib.call('update', params)
-    return success({ status: true })
+    const result = await dynamoDbLib.call('update', params)
+    return success(result.Attributes)
   } catch (e) {
     return failure(e)
   }
@@ -120,7 +123,7 @@ export const findTasks = async event => {
     if (result.Count) {
       return success(result.Items)
     } else {
-      return failure({ status: false, error: 'Item not found.' })
+      return failure([])
     }
   } catch (e) {
     return failure(e)

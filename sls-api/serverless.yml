@@ -1,10 +1,14 @@
-service: sls-api
+service: todo-sls-api
 
 package:
   individually: true
 
 plugins:
   - serverless-bundle
+  - serverless-offline
+
+custom:
+  defaultStage: dev
 
 provider:
   name: aws
@@ -16,19 +20,17 @@ provider:
   iamRoleStatements:
     - Effect: Allow
       Action:
-        - dynamodb:DescribeTable
-        - dynamodb:Query
-        - dynamodb:Scan
-        - dynamodb:GetItem
-        - dynamodb:PutItem
-        - dynamodb:UpdateItem
-        - dynamodb:DeleteItem
-      Resource:
-        - 'arn:aws:dynamodb:ap-northeast-1:*:*'
-        - 'arn:aws:cognito-idp:ap-northeast-1:723620532520:userpool/ap-northeast-1_niOLvC5MF'
+      - dynamodb:DescribeTable
+      - dynamodb:Query
+      - dynamodb:Scan
+      - dynamodb:GetItem
+      - dynamodb:PutItem
+      - dynamodb:UpdateItem
+      - dynamodb:DeleteItem
+      Resource: "arn:aws:dynamodb:ap-northeast-1:*:*"
   environment:
     DEPLOY_STAGE: ${opt:stage, self:custom.defaultStage}
-    TODOS_TABLE_NAME: Todo$_{opt:stage, self:custom.defaultStage}
+    TODOS_TABLE_NAME: Todo_${opt:stage, self:custom.defaultStage}
 
 functions:
   hello:
@@ -38,7 +40,6 @@ functions:
           path: hello
           method: get
           cors: true
-          authorizer: aws_iam
   createTask:
     handler: functions/task.createTask
     events:
@@ -81,10 +82,6 @@ functions:
           authorizer: aws_iam
   createUser:
     handler: functions/user.createUser
-    events:
-      - cognitoUserPool:
-        pool: sls-api-dev
-        trigger: PreAuthentication
   getUser:
     handler: functions/user.getUser
     events:
@@ -97,126 +94,10 @@ functions:
     handler: functions/user.updateUser
     events:
       - http:
-          path: task/{id}
+          path: user/{id}
           method: put
           cors: true
           authorizer: aws_iam
 
 resources:
-  Resources:
-    ResourcesDynamoDbTable:
-      Type: 'AWS::DynamoDB::Table'
-      DeletionPolicy: Delete
-      Properties:
-        AttributeDefinitions:
-          -
-            AttributeName: group
-            AttributeType: S
-          -
-            AttributeName: groupId
-            AttributeType: S
-          -
-            AttributeName: ownerId
-            AttributeType: S
-        KeySchema:
-          -
-            AttributeName: group
-            KeyType: HASH
-          -
-            AttributeName: groupId
-            KeyType: RANGE
-        ProvisionedThroughput:
-          ReadCapacityUnits: 1
-          WriteCapacityUnits: 1
-        GlobalSecondaryIndexes:
-        - IndexName: group-ownerId-index
-          KeySchema:
-            -
-              AttributeName: group
-              KeyType: HASH
-            -
-              AttributeName: ownerId
-              KeyType: RANGE
-          Projection:
-            ProjectionType: ALL
-          ProvisionedThroughput:
-            ReadCapacityUnits: 1
-            WriteCapacityUnits: 1
-        TableName: Todo_${opt:stage, self:custom.defaultStage}
-    UserPool:
-      Type: "AWS::Cognito::UserPool"
-      Properties:
-        AdminCreateUserConfig:
-            AllowAdminCreateUserOnly: false
-            UnusedAccountValidityDays: 7
-        AliasAttributes:
-          - email
-        AutoVerifiedAttributes:
-          - email
-        EmailVerificationMessage: "Your verification code is {####}."
-        EmailVerificationSubject: "Your verification code"
-        MfaConfiguration: 'OFF'
-        Policies:
-          PasswordPolicy:
-            MinimumLength: 8
-            RequireLowercase: true
-            RequireNumbers: true
-            RequireSymbols: false
-            RequireUppercase: false
-        UserPoolName:
-          Ref: AWS::StackName
-        Schema:
-          - AttributeDataType: "String"
-            DeveloperOnlyAttribute: false
-            Mutable: true
-            Name: "email"
-            StringAttributeConstraints:
-              MaxLength: "2048"
-              MinLength: "0"
-            Required: true
-          - AttributeDataType: "String"
-            DeveloperOnlyAttribute: false
-            Mutable: true
-            Name: "name"
-            StringAttributeConstraints:
-              MaxLength: "2048"
-              MinLength: "0"
-            Required: false
-          - AttributeDataType: "String"
-            DeveloperOnlyAttribute: false
-            Mutable: true
-            Name: "custom-attributes"
-            StringAttributeConstraints:
-              MaxLength: "2048"
-              MinLength: "0"
-            Required: false
-        SmsAuthenticationMessage:  "Your authentication code is {####}."
-        SmsVerificationMessage: "Your verification code is {####}."
-        UserPoolTags:
-          Name: 'Test'
-    UserPoolClient:
-      Type: "AWS::Cognito::UserPoolClient"
-      Properties:
-          ClientName:
-            Ref: AWS::StackName
-          GenerateSecret: false
-          ExplicitAuthFlows:
-            - "ADMIN_NO_SRP_AUTH"
-          ReadAttributes:
-            - "email"
-            - "name"
-            - "custom:custom-attributes"
-          RefreshTokenValidity: 30
-          UserPoolId:
-            Ref: UserPool
-          WriteAttributes:
-            - "email"
-            - "name"
-            - "custom:custom-attributes"
-Outputs:
-  UserPoolClientId:
-    Value:
-      Ref: UserPoolClient
-  UserPoolId:
-    Value:
-      Ref: UserPool
+  - ${file(resources.yml)}

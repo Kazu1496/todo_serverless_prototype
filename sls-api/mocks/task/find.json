@@ -1,7 +1,7 @@
 {
     "requestContext": {
         "identity": {
-            "cognitoIdentityId": "local-test"
+            "cognitoIdentityId": null
         }
     }
 }
