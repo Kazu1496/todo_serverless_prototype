@@ -1,5 +1,5 @@
 export const TaskListEnum = {
-  'BACKLOG': 'backlog',
-  'CURRENT': 'current',
-  'DONE': 'done'
+  'BACKLOG': 'Backlog',
+  'CURRENT': 'Current',
+  'DONE': 'Done'
 }

@@ -1,3 +1,4 @@
+import Vue from 'vue'
 import { T } from './types'
 import { TaskListEnum } from '../../types/index'
 
@@ -18,10 +19,12 @@ export const mutations = {
     state.task = task
   },
   [T.UPDATE_TASK] (state, task) {
-    const taskList = state.tasks[task.attributes.list]
-    taskList.forEach(obj => {
-      if (obj.groupId === task.groupId) {
-        obj = task
+    const beforeList = state.tasks[state.task.attributes.list]
+    const afterList = state.tasks[task.attributes.list]
+    beforeList.forEach((obj, index) => {
+      if (obj.groupId === state.task.groupId) {
+        beforeList.splice(index, 1)
+        afterList.push(task)
       }
     })
   },

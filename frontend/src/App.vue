@@ -6,8 +6,14 @@
 </template>
 
 <script>
+import Vue from 'vue'
 import PageTop from './components/pages/PageTop.vue'
 import GlobalHeader from './components/GlobalHeader.vue'
+import * as filters from './filters'
+
+Object.keys(filters).forEach(key => {
+  Vue.filter(key, filters[key])
+})
 
 export default {
   name: 'App',

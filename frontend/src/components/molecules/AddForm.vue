@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import { T } from '../../store/todo/types'
+import { T } from '../../store/task/types'
 import { TaskListEnum } from '../../types/index'
 
 export default {

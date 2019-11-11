@@ -66,7 +66,9 @@ export default {
         return
       }
       this.$store.dispatch(`task/${T.DELETE_TASK}`, this.$route.params.task_id)
-      this.$router.push('/')
+      this.$nextTick(() => {
+        this.$router.push('/')
+      })
     }
   }
 }

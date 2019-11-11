@@ -1,13 +1,14 @@
 <template lang="pug">
   ul(v-if="sortedTasks.length")
-    p.label {{ label }}
+    p.label {{ label | formatListName }}
     .list_item-container
       task-item(
-        v-for="task in sortedTasks"
+        v-for="(task, index) in sortedTasks"
         :task="task"
+        :key="index"
       )
   ul(v-else)
-    p.label {{ label }}
+    p.label {{ label | formatListName }}
     p.message Nothing Todo
 </template>
 
@@ -48,5 +49,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '../../assets/stylesheets/organisms/TodoList.scss';
+@import '../../assets/stylesheets/organisms/TaskList.scss';
 </style>

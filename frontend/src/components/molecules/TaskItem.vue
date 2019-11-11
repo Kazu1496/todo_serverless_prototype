@@ -21,5 +21,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '../../assets/stylesheets/molecules/TodoItem.scss';
+@import '../../assets/stylesheets/molecules/TaskItem.scss';
 </style>

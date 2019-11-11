@@ -11,7 +11,7 @@
 import AddForm from '../molecules/AddForm.vue'
 import TaskList from '../organisms/TaskList.vue'
 import AddItemModal from '../modal/AddItemModal.vue'
-import { T } from '../../store/todo/types'
+import { T } from '../../store/task/types'
 import { mapGetters } from 'vuex'
 
 export default {
