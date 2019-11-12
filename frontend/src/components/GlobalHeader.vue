@@ -3,6 +3,7 @@
     router-link(:to="{ name: 'home' }")
       h1 Todo Serverless App
     .right_area(v-if="user")
+      p {{ user.username }}
       <amplify-sign-out />
 </template>
 

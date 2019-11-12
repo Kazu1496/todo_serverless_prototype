@@ -1,22 +1,24 @@
-import Vue from 'vue'
 import { T } from './types'
 import { TaskListEnum } from '../../types/index'
 
 export const mutations = {
+  [T.INIT_TASKS] (state) {
+    state.tasks = {}
+  },
   [T.GET_TASKS] (state, tasks) {
-    const obj = {}
+    const _obj = {}
     Object.keys(TaskListEnum).forEach(key => {
       const _tasks = tasks.filter(task => task.attributes.list === key)
-      obj[key] = _tasks
-      state.tasks = obj
+      _obj[key] = _tasks
+      state.tasks = _obj
     })
+  },
+  [T.GET_TASK] (state, task) {
+    state.task = task
   },
   [T.ADD_TASK] (state, task) {
     const taskList = state.tasks[task.attributes.list]
     taskList.push(task)
-  },
-  [T.GET_TASK] (state, task) {
-    state.task = task
   },
   [T.UPDATE_TASK] (state, task) {
     const beforeList = state.tasks[state.task.attributes.list]

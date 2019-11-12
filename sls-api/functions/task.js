@@ -16,7 +16,7 @@ export const createTask = async event => {
       updatedAt: Date.now(),
       attributes: {
         title: data.title || 'title',
-        description: data.description || ' ',
+        description: data.description || '説明文がありません',
         list: data.list || 'BACKLOG',
         priority: data.priority || 1
       }
@@ -85,7 +85,7 @@ export const updateTask = async event => {
     ExpressionAttributeValues: {
       ':attributes': {
         title: data.title || 'title',
-        description: data.description || ' ',
+        description: data.description || '説明文がありません',
         list: data.list || 'BACKLOG',
         priority: data.priority || 1
       },

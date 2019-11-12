@@ -20,12 +20,10 @@ header{
     }
   }
   .right_area{
+    display: flex;
     height: 100%;
-    img{
-      width: 30px;
-      height: 30px;
-      border-radius: 50%;
-      margin-left: 20px;
+    p {
+      margin-right: 20px;
     }
   }
 }

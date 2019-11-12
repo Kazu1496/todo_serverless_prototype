@@ -54,8 +54,8 @@ const getUser = () => {
 
 // ユーザー管理
 getUser().then((user) => {
-  if (user) {
-    router.push({ path: '/' })
+  if (!user) {
+    router.push({ path: '/signin' })
   }
 })
 
@@ -64,6 +64,7 @@ AmplifyEventBus.$on('authState', async (state) => {
   if (state === 'signedOut') {
     user = null
     store.commit(`user/${T.SET_USER}`, null)
+    store.commit(`task/${T.INIT_TASKS}`)
     router.push({ path: '/signin' })
   } else if (state === 'signedIn') {
     user = await getUser()

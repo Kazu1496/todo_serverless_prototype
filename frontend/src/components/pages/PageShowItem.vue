@@ -4,14 +4,14 @@
       h1.title {{ task.attributes.title }}
     .status_area
       p.area_title Status
-      p {{ task.attributes.list }}
+      p {{ task.attributes.list | formatListName }}
     .priority_area
       p.area_title Priority
       font-awesome-icon(icon="star", v-for="n in task.attributes.priority" :key="n")
     .description_area
       p.area_title Description
       vue-markdown(
-        :source="task.attributes.description? task.attributes.description : '説明文がありません。' "
+        :source="task.attributes.description"
         class="markdown-body"
       )
     .link_area
