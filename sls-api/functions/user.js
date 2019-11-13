@@ -1,14 +1,14 @@
 import * as dynamoDbLib from '../libs/dynamodb-lib'
 import { success, failure } from '../libs/response-lib'
 
-const TableName = `Todo_${process.env.DEPLOY_STAGE}`
+const TableName = `todo-user-${process.env.DEPLOY_STAGE}`
 
 export const createUser = async event => {
+  console.log(event, '😚')
   const params = {
     TableName: TableName,
     Item: {
-      group: 'user',
-      groupId: event.userName,
+      id: event.userName,
       createdAt: Date.now(),
       updatedAt: Date.now(),
       attributes: {
@@ -23,6 +23,7 @@ export const createUser = async event => {
     await dynamoDbLib.call('put', params)
     return event
   } catch (e) {
+    console.log(e, '😂')
     return failure(e)
   }
 }
@@ -31,8 +32,7 @@ export const getUser = async event => {
   const params = {
     TableName: TableName,
     Key: {
-      group: 'user',
-      groupId: event.pathParameters.userId
+      id: event.pathParameters.userId
     }
   }
 
@@ -52,8 +52,7 @@ export const updateUser = async event => {
   const params = {
     TableName: TableName,
     Key: {
-      group: 'user',
-      groupId: event.pathParameters.userId
+      id: event.pathParameters.userId
     },
     ExpressionAttributeNames: {
       '#a': 'attributes',

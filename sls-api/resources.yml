@@ -17,26 +17,26 @@ Resources:
       ResponseType: DEFAULT_5XX
       RestApiId:
         Ref: 'ApiGatewayRestApi'
-  ResourcesDynamoDbTable:
+  GroupDynamoDbTable:
     Type: 'AWS::DynamoDB::Table'
     DeletionPolicy: Delete
     Properties:
       AttributeDefinitions:
         -
-          AttributeName: group
+          AttributeName: groupId
           AttributeType: S
         -
-          AttributeName: groupId
+          AttributeName: group
           AttributeType: S
         -
           AttributeName: ownerId
           AttributeType: S
       KeySchema:
         -
-          AttributeName: group
+          AttributeName: groupId
           KeyType: HASH
         -
-          AttributeName: groupId
+          AttributeName: group
           KeyType: RANGE
       ProvisionedThroughput:
         ReadCapacityUnits: 1
@@ -45,17 +45,40 @@ Resources:
       - IndexName: group-ownerId-index
         KeySchema:
           -
-            AttributeName: group
+            AttributeName: ownerId
             KeyType: HASH
           -
-            AttributeName: ownerId
+            AttributeName: group
             KeyType: RANGE
         Projection:
           ProjectionType: ALL
         ProvisionedThroughput:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
-      TableName: Todo_${opt:stage, self:custom.defaultStage}
+      TableName: todo-group-${opt:stage, self:custom.defaultStage}
+
+  UserDynamoDbTable:
+    Type: 'AWS::DynamoDB::Table'
+    DeletionPolicy: Delete
+    Properties:
+      AttributeDefinitions:
+        -
+          AttributeName: id
+          AttributeType: S
+        -
+          AttributeName: createdAt
+          AttributeType: N
+      KeySchema:
+        -
+          AttributeName: id
+          KeyType: HASH
+        -
+          AttributeName: createdAt
+          KeyType: RANGE
+      ProvisionedThroughput:
+        ReadCapacityUnits: 1
+        WriteCapacityUnits: 1
+      TableName: todo-user-${opt:stage, self:custom.defaultStage}
 
   UserPool:
     Type: "AWS::Cognito::UserPool"

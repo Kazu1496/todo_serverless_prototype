@@ -2,7 +2,7 @@ import uuid from 'uuid'
 import * as dynamoDbLib from '../libs/dynamodb-lib'
 import { success, failure } from '../libs/response-lib'
 
-const TableName = `Todo_${process.env.DEPLOY_STAGE}`
+const TableName = `todo-group-${process.env.DEPLOY_STAGE}`
 
 export const createTask = async event => {
   const data = JSON.parse(event.body)
@@ -52,8 +52,8 @@ export const getTask = async event => {
   const params = {
     TableName: TableName,
     Key: {
-      group: 'task',
-      groupId: event.pathParameters.id
+      groupId: event.pathParameters.id,
+      group: 'task'
     }
   }
 

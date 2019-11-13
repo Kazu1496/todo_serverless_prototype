@@ -30,7 +30,6 @@ provider:
       Resource: "arn:aws:dynamodb:ap-northeast-1:*:*"
   environment:
     DEPLOY_STAGE: ${opt:stage, self:custom.defaultStage}
-    TODOS_TABLE_NAME: Todo_${opt:stage, self:custom.defaultStage}
 
 functions:
   hello:
