@@ -7,13 +7,10 @@ plugins:
   - serverless-bundle
   - serverless-offline
 
-custom:
-  defaultStage: dev
-
 provider:
   name: aws
   runtime: nodejs10.x
-  stage: ${opt:stage, self:custom.defaultStage}
+  stage: ${opt:stage, 'dev'}
   region: ap-northeast-1
   iamManagedPolicies:
     - "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
@@ -29,7 +26,7 @@ provider:
       - dynamodb:DeleteItem
       Resource: "arn:aws:dynamodb:ap-northeast-1:*:*"
   environment:
-    DEPLOY_STAGE: ${opt:stage, self:custom.defaultStage}
+    DEPLOY_STAGE: ${self:provider.stage}
 
 functions:
   hello:
@@ -81,6 +78,10 @@ functions:
           authorizer: aws_iam
   createUser:
     handler: functions/user.createUser
+    events:
+      - cognitoUserPool:
+         pool: MyUserPool
+         trigger: PostConfirmation
   getUser:
     handler: functions/user.getUser
     events:
@@ -99,4 +100,6 @@ functions:
           authorizer: aws_iam
 
 resources:
-  - ${file(resources.yml)}
+  - ${file(resources/api-gateway-error.yml)}
+  - ${file(resources/cognito.yml)}
+  - ${file(resources/dynamodb-tables.yml)}
