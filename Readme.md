@@ -3,6 +3,7 @@
 Serverless Framework
 
 <img alt="アプリケーション構成" src="https://user-images.githubusercontent.com/39259275/68763842-cb8d1480-065c-11ea-94ad-747b823ebd85.png">
+
 ## Frontend
 Vue.js
 
