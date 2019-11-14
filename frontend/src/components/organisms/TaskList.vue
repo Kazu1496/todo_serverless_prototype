@@ -32,18 +32,15 @@ export default {
       default: () => ({})
     }
   },
-  data: () => {
-    return {
-      sortedTasks: []
+  computed: {
+    sortedTasks: function () {
+      const _taskList = this.$props.tasks
+      return _taskList.sort((a, b) => {
+        if (a.attributes.priority > b.attributes.priority) return -1
+        if (a.attributes.priority < b.attributes.priority) return 1
+        return 0
+      })
     }
-  },
-  mounted () {
-    const _taskList = this.$props.tasks
-    this.sortedTasks = _taskList.sort((a, b) => {
-      if (a.attributes.priority > b.attributes.priority) return -1
-      if (a.attributes.priority < b.attributes.priority) return 1
-      return 0
-    })
   }
 }
 </script>
