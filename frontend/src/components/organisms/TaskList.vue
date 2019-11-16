@@ -1,6 +1,9 @@
 <template lang="pug">
   ul(v-if="sortedTasks.length")
-    p.label {{ label | formatListName }}
+    .list_header
+      p.label {{ label | formatListName }}
+      button(v-if="label !== 'DONE'" @click="$emit('show', label)")
+        font-awesome-icon(icon="plus")
     .list_item-container
       task-item(
         v-for="(task, index) in sortedTasks"

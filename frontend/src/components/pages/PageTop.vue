@@ -1,10 +1,8 @@
 <template lang="pug">
   .todo
-    .button_area
-      button(@click="showModal = true") Add Todo
     .list-container
-      task-list(v-for="(tasks, key) in taskList" :tasks="tasks" :label="key")
-    add-item-modal(v-show="showModal", @close="showModal = false")
+      task-list(v-for="(tasks, key) in taskList" :tasks="tasks" :label="key" @show="onShowModal")
+    add-item-modal(v-show="showModal", @close="showModal = false" :label="addToList")
 </template>
 
 <script>
@@ -23,7 +21,8 @@ export default {
   },
   data: () => {
     return {
-      showModal: false
+      showModal: false,
+      addToList: ''
     }
   },
   computed: {
@@ -33,6 +32,12 @@ export default {
   },
   mounted () {
     this.$store.dispatch(`task/${T.GET_TASKS}`)
+  },
+  methods: {
+    onShowModal: function (label) {
+      this.addToList = label
+      this.showModal = true
+    }
   }
 }
 </script>

@@ -74,16 +74,22 @@ AmplifyEventBus.$on('authState', async (state) => {
 
 // リダイレクト処理
 router.beforeResolve(async (to, from, next) => {
+  user = await getUser()
   if (to.matched.some(record => record.meta.requiresAuth)) {
-    user = await getUser()
     if (!user) {
       return next({
         path: '/signin'
       })
     }
     return next()
+  } else {
+    if (user) {
+      return next({
+        path: '/'
+      })
+    }
+    return next()
   }
-  return next()
 })
 
 export default router

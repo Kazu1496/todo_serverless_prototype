@@ -5,7 +5,7 @@
         button(@click="$emit('close')")
           font-awesome-icon(icon="times", size="2x")
         h2 Add to the TodoList!
-        add-form
+        add-form(:label="label")
 </template>
 
 <script>
@@ -15,6 +15,13 @@ export default {
   name: 'AddItemModal',
   components: {
     AddForm
+  },
+  props: {
+    label: {
+      type: String,
+      require: true,
+      default: ''
+    }
   }
 }
 </script>
