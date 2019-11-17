@@ -71,7 +71,6 @@ export const getTask = async event => {
 
 export const updateTask = async event => {
   const data = JSON.parse(event.body)
-  console.log(data, 'data')
   const params = {
     TableName: TableName,
     Key: {
@@ -98,6 +97,35 @@ export const updateTask = async event => {
   try {
     const result = await dynamoDbLib.call('update', params)
     return success(result.Attributes)
+  } catch (e) {
+    return failure(e)
+  }
+}
+
+export const moveTask = async event => {
+  const data = JSON.parse(event.body)
+  const params = {
+    TableName: TableName,
+    Key: {
+      group: 'task',
+      groupId: event.pathParameters.id
+    },
+    ExpressionAttributeNames: {
+      '#a': 'attributes',
+      '#l': 'list',
+      '#uA': 'updatedAt'
+    },
+    ExpressionAttributeValues: {
+      ':list': data || 'BACKLOG',
+      ':updatedAt': Date.now()
+    },
+    UpdateExpression: 'SET #a.#l = :list, #uA = :updatedAt',
+    ReturnValues: 'ALL_NEW'
+  }
+
+  try {
+    await dynamoDbLib.call('update', params)
+    return success({ status: true })
   } catch (e) {
     return failure(e)
   }

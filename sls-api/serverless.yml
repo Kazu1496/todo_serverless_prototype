@@ -68,6 +68,14 @@ functions:
           method: put
           cors: true
           authorizer: aws_iam
+  moveTask:
+    handler: functions/task.moveTask
+    events:
+      - http:
+          path: move/{id}
+          method: put
+          cors: true
+          authorizer: aws_iam
   findTasks:
     handler: functions/task.findTasks
     events:
