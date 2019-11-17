@@ -157,3 +157,32 @@ export const findTasks = async event => {
     return failure(e)
   }
 }
+
+export const purgeTasks = async event => {
+  const data = JSON.parse(event.body)
+  const deleteList = []
+  data.forEach(taskId => {
+    const deleteObj = {
+      DeleteRequest: {
+        Key: {
+          group: 'task',
+          groupId: taskId
+        }
+      }
+    }
+    deleteList.push(deleteObj)
+  })
+
+  const params = {
+    RequestItems: {
+      [TableName]: deleteList
+    }
+  }
+
+  try {
+    await dynamoDbLib.call('batchWrite', params)
+    return success({ status: true })
+  } catch (e) {
+    return failure(e)
+  }
+}

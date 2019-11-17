@@ -24,6 +24,7 @@ provider:
       - dynamodb:PutItem
       - dynamodb:UpdateItem
       - dynamodb:DeleteItem
+      - dynamodb:BatchWriteItem
       Resource: "arn:aws:dynamodb:ap-northeast-1:*:*"
   environment:
     DEPLOY_STAGE: ${self:provider.stage}
@@ -82,6 +83,14 @@ functions:
       - http:
           path: tasks
           method: get
+          cors: true
+          authorizer: aws_iam
+  purgeTasks:
+    handler: functions/task.purgeTasks
+    events:
+      - http:
+          path: tasks/purge
+          method: delete
           cors: true
           authorizer: aws_iam
   createUser:
