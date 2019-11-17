@@ -4,15 +4,14 @@
       p.label {{ label | formatListName }}
       button(v-if="label !== 'DONE'" @click="$emit('show', label)")
         font-awesome-icon(icon="plus")
+      button.purge(v-else @click="purgeTasks") Purge
     draggable(v-if="sortedTasks.length" tag="ul" group="TASKS" @end="dragEnd" :data-label="label")
       task-item(
         v-for="(task, index) in sortedTasks"
         :task="task"
         :key="index"
       )
-    ul(v-else)
-      p.label {{ label | formatListName }}
-      p.message Nothing Todo
+    draggable(v-else tag="ul" group="TASKS" @end="dragEnd" :data-label="label")
 </template>
 
 <script>
@@ -55,6 +54,12 @@ export default {
         toList: event.to.dataset.label,
         fromList: event.from.dataset.label
       })
+    },
+    purgeTasks: function () {
+      if (!confirm('アーカイブしてもよろしいですか？')) {
+        return
+      }
+      this.$emit('purge')
     }
   }
 }

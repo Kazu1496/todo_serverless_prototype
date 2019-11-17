@@ -52,5 +52,14 @@ export const actions = {
       .catch(err => {
         alert(err, 'MOVE_TASK')
       })
+  },
+  [T.PURGE_TASKS] ({ commit }, taskIds) {
+    Amplify.API.del('sls-api', `/tasks/purge`, { body: taskIds })
+      .then(_ => {
+        commit(T.PURGE_TASKS)
+      })
+      .catch(err => {
+        alert(err, 'PURGE_TASKS')
+      })
   }
 }

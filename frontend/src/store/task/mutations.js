@@ -37,5 +37,8 @@ export const mutations = {
         taskList.splice(index, 1)
       }
     })
+  },
+  [T.PURGE_TASKS] (state) {
+    state.tasks.DONE.splice(0, state.tasks.DONE.length - 1)
   }
 }

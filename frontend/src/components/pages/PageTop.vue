@@ -1,7 +1,7 @@
 <template lang="pug">
   .todo
     .list-container
-      task-list(v-for="(tasks, key) in taskList" :tasks="tasks" :label="key" @show="onShowModal")
+      task-list(v-for="(tasks, key) in taskList" :tasks="tasks" :label="key" @show="onShowModal" @purge="onPurgeTasks")
     add-item-modal(v-show="showModal", @close="showModal = false" :label="addToList")
 </template>
 
@@ -37,6 +37,10 @@ export default {
     onShowModal: function (label) {
       this.addToList = label
       this.showModal = true
+    },
+    onPurgeTasks: function () {
+      const taskIds = this.taskList.DONE.map(task => task.groupId)
+      this.$store.dispatch(`task/${T.PURGE_TASKS}`, taskIds)
     }
   }
 }
