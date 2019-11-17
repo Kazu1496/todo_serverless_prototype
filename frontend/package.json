@@ -38,7 +38,7 @@
     "vue-rate-it": "^2.1.0",
     "vue-router": "^3.0.6",
     "vue-template-compiler": "^2.5.21",
-    "vuedraggable": "^2.21.0",
+    "vuedraggable": "^2.23.2",
     "vuex": "^3.1.2"
   },
   "eslintConfig": {

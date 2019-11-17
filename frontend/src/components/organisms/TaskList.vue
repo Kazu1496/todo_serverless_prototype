@@ -1,27 +1,30 @@
 <template lang="pug">
-  ul(v-if="sortedTasks.length")
+  .list_container
     .list_header
       p.label {{ label | formatListName }}
       button(v-if="label !== 'DONE'" @click="$emit('show', label)")
         font-awesome-icon(icon="plus")
-    .list_item-container
+    draggable(v-if="sortedTasks.length" tag="ul" group="TASKS" @end="dragEnd" :data-label="label")
       task-item(
         v-for="(task, index) in sortedTasks"
         :task="task"
         :key="index"
       )
-  ul(v-else)
-    p.label {{ label | formatListName }}
-    p.message Nothing Todo
+    ul(v-else)
+      p.label {{ label | formatListName }}
+      p.message Nothing Todo
 </template>
 
 <script>
 import TaskItem from '../molecules/TaskItem.vue'
+import draggable from 'vuedraggable'
+import { T } from '../../store/task/types'
 
 export default {
   name: 'TaskList',
   components: {
-    TaskItem
+    TaskItem,
+    draggable
   },
   props: {
     tasks: {
@@ -42,6 +45,15 @@ export default {
         if (a.attributes.priority > b.attributes.priority) return -1
         if (a.attributes.priority < b.attributes.priority) return 1
         return 0
+      })
+    }
+  },
+  methods: {
+    dragEnd: function (event) {
+      this.$store.dispatch(`task/${T.MOVE_TASK}`, {
+        id: event.item.dataset.taskId,
+        toList: event.to.dataset.label,
+        fromList: event.from.dataset.label
       })
     }
   }

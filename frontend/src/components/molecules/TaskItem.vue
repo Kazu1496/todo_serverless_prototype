@@ -1,5 +1,5 @@
 <template lang="pug">
-  router-link(:to="{ name: 'show-item', params: { task_id: task.groupId } }")
+  router-link(:to="{ name: 'show-item', params: { task_id: task.groupId } }" :data-task-id="task.groupId")
     li
       .task_elements
         span.title {{ task.attributes.title }}
