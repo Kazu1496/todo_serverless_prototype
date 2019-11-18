@@ -38,7 +38,19 @@ export const mutations = {
       }
     })
   },
+  [T.MOVE_TASK] (state, params) {
+    if (params.task.attributes.list !== params.list) {
+      state.tasks[params.task.attributes.list].push(params.task)
+      state.tasks[params.list].forEach((obj, index) => {
+        if (obj.groupId === params.task.groupId) {
+          state.tasks[params.list].splice(index, 1)
+        }
+      })
+    }
+    console.log(state.tasks)
+  },
   [T.PURGE_TASKS] (state) {
-    state.tasks.DONE.splice(0, state.tasks.DONE.length - 1)
+    state.tasks.DONE.splice(0, state.tasks.DONE.length)
+    console.log(state.tasks)
   }
 }

@@ -4,10 +4,6 @@
     .score_area
       span Priority:{{ task.attributes.priority }}
       star-rating(:star-size="20", :show-rating="false", active-color="#FFA726", v-model="task.attributes.priority")
-    .select_area
-      span Status:
-      select(v-model="task.attributes.list")
-        option(v-for="option in options") {{ option }}
     textarea(placeholder="Description", v-model="task.attributes.description")
     input(type="submit", value="Update")
 </template>

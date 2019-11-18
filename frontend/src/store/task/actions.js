@@ -49,6 +49,9 @@ export const actions = {
   },
   [T.MOVE_TASK] ({ commit }, params) {
     Amplify.API.put('sls-api', `/move/${params.id}`, { body: params.toList })
+      .then(res => {
+        commit(T.MOVE_TASK, { task: res, list: params.fromList })
+      })
       .catch(err => {
         alert(err, 'MOVE_TASK')
       })
