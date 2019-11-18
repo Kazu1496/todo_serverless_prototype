@@ -79,18 +79,18 @@ export const updateTask = async event => {
     },
     ExpressionAttributeNames: {
       '#a': 'attributes',
+      '#t': 'title',
+      '#d': 'description',
+      '#p': 'priority',
       '#uA': 'updatedAt'
     },
     ExpressionAttributeValues: {
-      ':attributes': {
-        title: data.title || 'title',
-        description: data.description || '説明文がありません',
-        list: data.list || 'BACKLOG',
-        priority: data.priority || 1
-      },
+      ':title': data.title || 'title',
+      ':description': data.description || '説明文がありません',
+      ':priority': data.priority || 1,
       ':updatedAt': Date.now()
     },
-    UpdateExpression: 'SET #a = :attributes, #uA = :updatedAt',
+    UpdateExpression: 'SET #a.#t = :title, #a.#d = :description, #a.#p = :priority, #uA = :updatedAt',
     ReturnValues: 'ALL_NEW'
   }
 
@@ -124,8 +124,8 @@ export const moveTask = async event => {
   }
 
   try {
-    await dynamoDbLib.call('update', params)
-    return success({ status: true })
+    const result = await dynamoDbLib.call('update', params)
+    return success(result.Attributes)
   } catch (e) {
     return failure(e)
   }
