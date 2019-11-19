@@ -10,6 +10,7 @@
 <script>
 import { mapGetters } from 'vuex'
 import { Auth } from 'aws-amplify'
+import { T } from '../store/task/types'
 
 export default {
   name: 'GlobalHeader',
@@ -22,6 +23,7 @@ export default {
     signOut: function () {
       Auth.signOut()
         .then(_ => {
+          this.$store.commit(`task/${T.INIT_TASKS}`)
           this.$router.push('/signin')
         })
         .catch(e => {

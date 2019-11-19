@@ -3,7 +3,7 @@ import { T } from './types'
 
 export const mutations = {
   [T.INIT_TASKS] (state) {
-    state.tasks = []
+    state.tasks.splice(0, state.tasks.length)
   },
   [T.GET_TASKS] (state, tasks) {
     state.tasks = tasks
