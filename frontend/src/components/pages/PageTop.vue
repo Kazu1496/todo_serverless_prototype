@@ -1,7 +1,12 @@
 <template lang="pug">
   .todo
     .list-container
-      task-list(v-for="(tasks, key) in taskList" :tasks="tasks" :label="key" @show="onShowModal" @purge="onPurgeTasks")
+      task-list(
+        v-for="(tasks, key) in taskList"
+        :tasks="tasks" :label="key"
+        @show="onShowModal"
+        @purge="onPurgeTasks"
+        )
     add-item-modal(v-show="showModal", @close="showModal = false" :label="addToList")
 </template>
 

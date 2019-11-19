@@ -18,7 +18,11 @@
       router-link(:to="{ name: 'home' }") Back
       a(@click="showModal = true") Edit
       a(@click="deleteItem") Delete
-    edit-item-modal(v-show="showModal", @close="showModal = false", :task="targetTask")
+    edit-item-modal(
+      v-show="showModal"
+      @close="showModal = false"
+      :task="targetTask"
+      )
 </template>
 
 <script>

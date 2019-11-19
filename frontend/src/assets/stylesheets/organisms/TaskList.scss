@@ -29,6 +29,10 @@
     }
     .purge{
       border-radius: 5px;
+      &:disabled{
+        border-color: #c1c1c1;
+        background-color: #c1c1c1;
+      }
     }
   }
   ul, .nothing_item{
