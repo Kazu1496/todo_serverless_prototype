@@ -51,8 +51,7 @@ export default {
     dragEnd: function (event) {
       this.$store.dispatch(`task/${T.MOVE_TASK}`, {
         id: event.item.dataset.taskId,
-        toList: event.to.dataset.label,
-        fromList: event.from.dataset.label
+        toList: event.to.dataset.label
       })
     },
     purgeTasks: function () {
