@@ -4,7 +4,7 @@
       p.label {{ label | formatListName }}
       button(v-if="label !== 'DONE'" @click="$emit('show', label)")
         font-awesome-icon(icon="plus")
-      button.purge(v-else @click="purgeTasks" :disabled="sortedTasks.length === 0") Purge
+      button.purge(v-else @click="purgeTasks") Purge
     draggable(
       v-if="sortedTasks.length"
       tag="ul" group="TASKS"
