@@ -22,9 +22,9 @@ export const mutations = {
     const index = state.tasks.findIndex(obj => obj.groupId === state.task.groupId)
     state.tasks.splice(index, 1)
   },
-  [T.PURGE_TASKS] (state) {
+  [T.PURGE_TASKS] (state, taskIds) {
     state.tasks.forEach((obj, index) => {
-      if (obj.attributes.list === 'DONE') {
+      if (taskIds.includes(obj.groupId)) {
         state.tasks.splice(index, 1)
       }
     })

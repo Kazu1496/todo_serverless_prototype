@@ -1,5 +1,5 @@
 <template lang="pug">
-  .show_item-container
+  .show_item-container(v-if="Object.keys(task).length")
     .item_header
       h1.title {{ task.attributes.title }}
     .status_area
@@ -29,7 +29,7 @@
 import EditItemModal from '../modal/EditItemModal.vue'
 import VueMarkdown from 'vue-markdown'
 import { T } from '../../store/task/types'
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 
 const clonedeep = require('lodash/cloneDeep')
 
@@ -52,7 +52,7 @@ export default {
   },
   watch: {
     task: {
-      handler: function (newVal, oldValue) {
+      handler (newVal, oldValue) {
         if (newVal !== oldValue) {
           this.targetTask = clonedeep(newVal)
         }
@@ -62,17 +62,19 @@ export default {
     }
   },
   mounted () {
-    this.$store.dispatch(`task/${T.GET_TASK}`, this.$route.params.task_id)
+    this.getTask(this.$route.params.task_id)
   },
   methods: {
+    ...mapActions({
+      getTask: `task/${T.GET_TASK}`,
+      deleteTask: `task/${T.DELETE_TASK}`
+    }),
     deleteItem () {
       if (!confirm('削除しても大丈夫ですか？')) {
         return
       }
-      this.$store.dispatch(`task/${T.DELETE_TASK}`, this.$route.params.task_id)
-      this.$nextTick(() => {
-        this.$router.push('/')
-      })
+      this.deleteTask(this.$route.params.task_id)
+      this.$routes.push('/')
     }
   }
 }

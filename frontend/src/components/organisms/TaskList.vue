@@ -10,6 +10,7 @@
       tag="ul" group="TASKS"
       @end="dragEnd"
       :data-label="label"
+      :animation="200"
       )
       task-item(
         v-for="(task, index) in sortedTasks"
@@ -23,6 +24,7 @@
 import TaskItem from '../molecules/TaskItem.vue'
 import draggable from 'vuedraggable'
 import { T } from '../../store/task/types'
+import { mapActions } from 'vuex'
 
 export default {
   name: 'TaskList',
@@ -34,16 +36,16 @@ export default {
     tasks: {
       type: Array,
       require: true,
-      default: () => ([])
+      default: () => []
     },
     label: {
       type: String,
       require: true,
-      default: () => ({})
+      default: () => {}
     }
   },
   computed: {
-    sortedTasks: function () {
+    sortedTasks () {
       const _taskList = this.$props.tasks
       return _taskList.sort((a, b) => {
         if (a.attributes.priority > b.attributes.priority) return -1
@@ -53,13 +55,16 @@ export default {
     }
   },
   methods: {
-    dragEnd: function (event) {
-      this.$store.dispatch(`task/${T.MOVE_TASK}`, {
+    ...mapActions({
+      moveTask: `task/${T.MOVE_TASK}`
+    }),
+    dragEnd (event) {
+      this.moveTask({
         id: event.item.dataset.taskId,
         toList: event.to.dataset.label
       })
     },
-    purgeTasks: function () {
+    purgeTasks () {
       if (!confirm('アーカイブしてもよろしいですか？')) {
         return
       }

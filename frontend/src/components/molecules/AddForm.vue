@@ -10,6 +10,7 @@
 
 <script>
 import { T } from '../../store/task/types'
+import { mapActions } from 'vuex'
 
 export default {
   name: 'AddForm',
@@ -28,6 +29,9 @@ export default {
     }
   },
   methods: {
+    ...mapActions({
+      addTask: `task/${T.ADD_TASK}`
+    }),
     addItem () {
       if (this.title === '') {
         alert('値を入力してください。')
@@ -39,7 +43,7 @@ export default {
         description: this.description,
         list: this.$props.label
       }
-      this.$store.dispatch(`task/${T.ADD_TASK}`, { body: item })
+      this.addTask({ body: item })
       this.title = ''
       this.description = ''
       this.score = 1

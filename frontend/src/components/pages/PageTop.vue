@@ -15,7 +15,7 @@ import AddForm from '../molecules/AddForm.vue'
 import TaskList from '../organisms/TaskList.vue'
 import AddItemModal from '../modal/AddItemModal.vue'
 import { T } from '../../store/task/types'
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 
 export default {
   name: 'PageTop',
@@ -36,16 +36,20 @@ export default {
     })
   },
   mounted () {
-    this.$store.dispatch(`task/${T.GET_TASKS}`)
+    this.getTasks()
   },
   methods: {
-    onShowModal: function (label) {
+    ...mapActions({
+      getTasks: `task/${T.GET_TASKS}`,
+      purgeTasks: `task/${T.PURGE_TASKS}`
+    }),
+    onShowModal (label) {
       this.addToList = label
       this.showModal = true
     },
-    onPurgeTasks: function () {
+    onPurgeTasks () {
       const taskIds = this.taskList.DONE.map(task => task.groupId)
-      this.$store.dispatch(`task/${T.PURGE_TASKS}`, taskIds)
+      this.purgeTasks(taskIds)
     }
   }
 }

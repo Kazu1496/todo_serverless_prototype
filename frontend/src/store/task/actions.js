@@ -7,17 +7,15 @@ export const actions = {
       .then(res => {
         commit(T.GET_TASKS, res)
       })
-      .catch(err => {
-        alert(err, 'GET_TASKS')
-      })
   },
   [T.GET_TASK] ({ commit }, id) {
     Amplify.API.get('sls-api', `/task/${id}`)
       .then(res => {
-        commit(T.GET_TASK, res)
-      })
-      .catch(err => {
-        alert(err, 'GET_TASK')
+        if (!Object.keys(res).includes('error')) {
+          commit(T.GET_TASK, res)
+        } else {
+          alert(res.error)
+        }
       })
   },
   [T.ADD_TASK] ({ commit }, task) {
@@ -25,26 +23,17 @@ export const actions = {
       .then(res => {
         commit(T.ADD_TASK, res)
       })
-      .catch(err => {
-        alert(err, 'ADD_TASK')
-      })
   },
   [T.UPDATE_TASK] ({ commit }, params) {
     Amplify.API.put('sls-api', `/task/${params.id}`, { body: params.item })
       .then(res => {
         commit(T.UPDATE_TASK, res)
       })
-      .catch(err => {
-        alert(err, 'UPDATE_TASK')
-      })
   },
   [T.DELETE_TASK] ({ commit }, id) {
     Amplify.API.del('sls-api', `/task/${id}`)
-      .then(res => {
+      .then(_ => {
         commit(T.DELETE_TASK)
-      })
-      .catch(err => {
-        alert(err, 'DELETE_TASK')
       })
   },
   [T.MOVE_TASK] ({ commit }, params) {
@@ -52,17 +41,11 @@ export const actions = {
       .then(res => {
         commit(T.UPDATE_TASK, res)
       })
-      .catch(err => {
-        alert(err, 'MOVE_TASK')
-      })
   },
   [T.PURGE_TASKS] ({ commit }, taskIds) {
     Amplify.API.del('sls-api', `/tasks/purge`, { body: taskIds })
       .then(_ => {
-        commit(T.PURGE_TASKS)
-      })
-      .catch(err => {
-        alert(err, 'PURGE_TASKS')
+        commit(T.PURGE_TASKS, taskIds)
       })
   }
 }

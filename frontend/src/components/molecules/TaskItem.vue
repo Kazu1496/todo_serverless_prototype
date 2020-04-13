@@ -14,7 +14,7 @@ export default {
     task: {
       type: Object,
       require: true,
-      default: () => ({})
+      default: () => {}
     }
   }
 }

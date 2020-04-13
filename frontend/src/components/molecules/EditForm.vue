@@ -11,6 +11,7 @@
 <script>
 import { T } from '../../store/task/types'
 import { TaskListEnum } from '../../types/index'
+import { mapActions } from 'vuex'
 
 export default {
   name: 'EditForm',
@@ -18,7 +19,7 @@ export default {
     task: {
       type: Object,
       require: true,
-      default: () => ({})
+      default: () => {}
     }
   },
   data () {
@@ -27,6 +28,9 @@ export default {
     }
   },
   methods: {
+    ...mapActions({
+      updateTask: `task/${T.UPDATE_TASK}`
+    }),
     updateItem () {
       if (this.task.attributes.title === '') {
         alert('値を入力してください。')
@@ -41,7 +45,7 @@ export default {
           list: this.task.attributes.list
         }
       }
-      this.$store.dispatch(`task/${T.UPDATE_TASK}`, params)
+      this.updateTask(params)
       this.$router.push('/')
     }
   }
